@@ -6,6 +6,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
+import { ConfigProvider } from "antd";
 
 import "./tailwind.css";
 
@@ -18,7 +19,7 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://api.fontshare.com/v2/css?f[]=satoshi@300,301,400,401,500,501,700,701,900,901,1,2&display=swap",
   },
 ];
 
@@ -41,5 +42,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#8b4d0b",
+          colorSuccess: "#0069fc",
+          colorWarning: "#f5222d",
+          colorError: "#ff0004",
+          borderRadius: 4,
+          boxShadow: "none",
+          fontFamily: "'Satoshi', sans-serif",
+        },
+        components: {
+          Button: {
+            paddingBlock: 22,
+          },
+          Select: {
+            controlHeight: 46,
+          },
+          Input: {
+            paddingInline: 24,
+            controlHeight: 46,
+          },
+        },
+      }}
+    >
+      <Outlet />
+    </ConfigProvider>
+  );
 }
