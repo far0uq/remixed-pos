@@ -4,6 +4,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 import { ConfigProvider } from "antd";
@@ -70,5 +71,23 @@ export default function App() {
     >
       <Outlet />
     </ConfigProvider>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  console.error(error);
+  return (
+    <html lang="en">
+      <head>
+        <title>Error in Root.</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <h1>Oh no!</h1>
+        <Scripts />
+      </body>
+    </html>
   );
 }

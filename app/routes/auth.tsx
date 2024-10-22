@@ -1,20 +1,26 @@
-import { useNavigation } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { Form, Flex, Button } from "antd";
-import { json, redirect } from "@remix-run/react";
+import { useState } from "react";
+import { toast, Toaster } from "react-hot-toast";
 
 function AuthForm() {
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const url = useLoaderData() as string;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const callPageAction = async () => {
-    await fetch("/auth", {
-      method: "POST",
+  const openURL = () => {
+    if (!isSubmitting) setIsSubmitting(true);
+    toast.loading("Authorizing...", {
+      style: {
+        fontSize: "20px",
+      },
     });
+    window.location.replace(url);
   };
 
   return (
     <Flex justify="center" align="center" style={{ height: "100%" }}>
-      <Form style={{ height: "13%", width: "15%" }}>
+      <Toaster />
+      <Form method="post" style={{ height: "13%", width: "15%" }}>
         <Flex style={{ height: "100%" }} justify="space-between" vertical>
           <Form.Item>
             <h4>Authorization required for Dorya Inc.</h4>
@@ -24,7 +30,8 @@ function AuthForm() {
               disabled={isSubmitting}
               style={{ width: "100%" }}
               type="primary"
-              onClick={callPageAction}
+              onClick={openURL}
+              htmlType="submit"
             >
               Authorize
             </Button>
@@ -35,17 +42,23 @@ function AuthForm() {
   );
 }
 
-export const action = async () => {
+export const loader = async () => {
   const resp = await fetch("http://localhost:5000/api/login", {
     method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
   const { result } = await resp.json();
-  console.log(result.url);
-  if (resp.ok) {
-    return redirect(result.url);
-  } else {
-    return json({ message: "Failed to fetch authTokenAPI" }, { status: 500 });
-  }
+  return result.url as string;
 };
+
+export function ErrorBoundary() {
+  return (
+    <div>
+      <h1>Something went wrong</h1>
+    </div>
+  );
+}
 
 export default AuthForm;
