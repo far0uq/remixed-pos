@@ -26,14 +26,11 @@ export async function handleObtainToken(
 
       session.set("tokenForAPI", result.tokenForAPI);
       session.set("tokenForVerification", result.tokenForVerification);
-      console.log(session.data);
 
       headers.append(
         "Set-Cookie",
         await commitSession(session) // Commit session to store in a cookie
       );
-
-      console.log(headers);
 
       return new Response(
         JSON.stringify({
@@ -62,7 +59,6 @@ export async function handleObtainToken(
 export const verifyToken = async (request: Request) => {
   try {
     const cookieHeader = request.headers.get("Cookie");
-    console.log(cookieHeader);
     if (!cookieHeader) {
       throw new Error("No cookies found in request.");
     }
@@ -70,8 +66,6 @@ export const verifyToken = async (request: Request) => {
     // Retrieve session from cookie
     const session = await getSession(cookieHeader);
     const token = session.get("tokenForVerification");
-
-    console.log(token);
 
     if (!token) {
       throw new Error("Could not retrieve token from Session.");

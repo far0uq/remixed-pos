@@ -1,7 +1,8 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, redirect } from "@remix-run/react";
 import { Form, Flex, Button } from "antd";
 import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import { getSession } from "~/services/session";
 
 function AuthForm() {
   const url = useLoaderData() as string;
@@ -43,6 +44,10 @@ function AuthForm() {
 }
 
 export const loader = async () => {
+  const session = await getSession();
+  if (session && session.data.length > 0) {
+    return redirect("/home");
+  }
   const resp = await fetch("http://localhost:5000/api/login", {
     method: "GET",
     headers: {
