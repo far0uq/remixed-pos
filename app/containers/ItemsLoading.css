@@ -1,0 +1,11 @@
+@media screen and (min-width: 991px) {
+  .loading-bar > div {
+    width: 18% !important;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .loading-bar > div {
+    width: 100% !important;
+  }
+}

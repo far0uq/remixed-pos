@@ -24,8 +24,8 @@ export async function handleObtainToken(
 
       // Save token in session here
 
-      session.set("tokenForAPI", result.tokenForAPI);
-      session.set("tokenForVerification", result.tokenForVerification);
+      session.set("API", result.tokenForAPI);
+      session.set("Verification", result.tokenForVerification);
 
       headers.append(
         "Set-Cookie",
@@ -65,7 +65,7 @@ export const verifyToken = async (request: Request) => {
 
     // Retrieve session from cookie
     const session = await getSession(cookieHeader);
-    const token = session.get("tokenForVerification");
+    const token = session.get("Verification");
 
     if (!token) {
       throw new Error("Could not retrieve token from Session.");
