@@ -2,7 +2,7 @@ import { defer, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { getCategory, getProducts } from "~/api/productAPI";
 import { verifyToken } from "~/api/tokenAPI";
 import NavbarContainer from "~/containers/NavbarContainer";
-import ProductBrowser from "~/containers/ProductBrower";
+import ProductBrowser from "~/containers/ProductBrowser";
 
 function HomePage() {
   return (
@@ -13,7 +13,7 @@ function HomePage() {
   );
 }
 
-export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const resp = await verifyToken(request);
   console.log(resp.status);
   if (resp.status === 500) {
@@ -21,11 +21,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     return redirect("/auth");
   }
 
-  const timeout = 3000;
+  const timeout = 2000;
 
-  const query = params.get("query") || "";
-  const category = params.get("category") || "";
-  
   const products = await getProducts(request);
   const productRespPromise = new Promise((resolve) => {
     setTimeout(() => {

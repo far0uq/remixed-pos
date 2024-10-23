@@ -1,5 +1,5 @@
 import { SearchOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { Row, Col, Input, Select, Tooltip, Button, Form, Skeleton } from "antd";
+import { Row, Col, Input, Select, Tooltip, Button, Form } from "antd";
 import { Await, useLoaderData, useSearchParams } from "@remix-run/react";
 import { loader } from "~/routes/auth";
 import { CategoryFormatted } from "~/interface/CategoryInterface";
@@ -10,8 +10,6 @@ function SearchBar() {
   const { categoryResp } = useLoaderData<typeof loader>();
   const [form] = Form.useForm();
   const [searchParams, setSearchParams] = useSearchParams();
-  const lastQuery = "";
-  const lastCategory = "";
 
   interface SearchFormat {
     query: string;
@@ -19,12 +17,10 @@ function SearchBar() {
   }
 
   const handleSaveQuery = (values: SearchFormat) => {
-    const query = lastQuery;
-    const category = lastCategory;
+    console.log(values);
     const params = new URLSearchParams();
-    if (values.query !== query) params.set("query", values.query);
-    if (values.category !== category) params.set("category", values.category);
-
+    params.set("query", values.query);
+    params.set("category", values.category);
     setSearchParams(params, {
       preventScrollReset: true,
     });
@@ -57,9 +53,7 @@ function SearchBar() {
         </Col>
         <Col xs={12} sm={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 3 }}>
           <Form.Item name="category">
-            <Suspense
-              fallback={<CategoriesLoading  />}
-            >
+            <Suspense fallback={<CategoriesLoading />}>
               <Await resolve={categoryResp}>
                 {(categoryResp: string) => {
                   const categoryData = JSON.parse(categoryResp);

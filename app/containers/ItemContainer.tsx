@@ -1,4 +1,4 @@
-import { Flex, Grid } from "antd";
+import { Empty, Flex, Grid } from "antd";
 
 import Item from "./Item";
 import { Product } from "../interface/ProductInterface";
@@ -11,8 +11,7 @@ function ItemContainer({ productResp: data }: { productResp: string }) {
 
   return (
     <Flex wrap gap={screens.lg ? "2%" : "0%"} style={{ width: "100%" }}>
-      {dataArray &&
-        dataArray.length > 0 &&
+      {dataArray && dataArray.length > 0 ? (
         dataArray.map((item: Product) => {
           return (
             <div
@@ -25,7 +24,10 @@ function ItemContainer({ productResp: data }: { productResp: string }) {
               <Item item={item} />
             </div>
           );
-        })}
+        })
+      ) : (
+        <Empty style={{ width: "100%", marginTop: "22vh" }} />
+      )}
     </Flex>
   );
 }

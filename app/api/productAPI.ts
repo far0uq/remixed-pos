@@ -19,9 +19,16 @@ export async function getProducts(req: Request) {
     }
     console.log("AFTER TOKEN");
 
+    const reqURL = new URL(req.url);
+
     let cursor = "";
-    const query = "";
-    const category = "";
+    let query = reqURL.searchParams.get("query");
+    query = query === "undefined" || !query ? "" : query;
+    let category = reqURL.searchParams.get("category");
+    category =
+      category === "undefined" || category === "0" || !category ? "" : category;
+    console.log(query);
+    console.log(category);
 
     const url = `http://localhost:5000/api/search-catalog-items?textFilter=${query}&categoryId=${category}&cursor=${cursor}`;
     console.log(url);
