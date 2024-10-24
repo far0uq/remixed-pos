@@ -15,27 +15,28 @@ function HomePage() {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const resp = await verifyToken(request);
-  console.log(resp.status);
   if (resp.status === 500) {
     console.log("Redirecting to /auth");
     return redirect("/auth");
   }
 
-  const timeout = 2000;
+  const url = new URL(request.url);
+  console.log("URL: ", url);
+  const cursor = url.searchParams.get("cursor");
 
-  const products = await getProducts(request);
-  const productRespPromise = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(products);
-    }, timeout);
-  });
+  if (cursor) {
+    console.log("EXECUTED 1");
+    const resp = await getProducts(request);
+    return resp;
+  } else {
+    const productRespPromise = getProducts(request);
+    const categoryPromise = getCategory(request);
 
-  const categoryPromise = getCategory(request);
-
-  return defer({
-    productResp: productRespPromise,
-    categoryResp: categoryPromise,
-  });
+    return defer({
+      productResp: productRespPromise,
+      categoryResp: categoryPromise,
+    });
+  }
 };
 
 export default HomePage;

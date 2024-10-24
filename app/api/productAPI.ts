@@ -21,7 +21,7 @@ export async function getProducts(req: Request) {
 
     const reqURL = new URL(req.url);
 
-    let cursor = "";
+    let cursor = reqURL.searchParams.get("cursor") ?? "";
     let query = reqURL.searchParams.get("query");
     query = query === "undefined" || !query ? "" : query;
     let category = reqURL.searchParams.get("category");
@@ -31,7 +31,7 @@ export async function getProducts(req: Request) {
     console.log(category);
 
     const url = `http://localhost:5000/api/search-catalog-items?textFilter=${query}&categoryId=${category}&cursor=${cursor}`;
-    console.log(url);
+    console.log("inside productAPI LMAO " + url);
 
     const resp = await fetch(url, {
       method: "GET",
@@ -52,7 +52,7 @@ export async function getProducts(req: Request) {
 
     if (objects) {
       const cleanedObjects = cleanProductObjects(objects);
-      return JSON.stringify(cleanedObjects);
+      return JSON.stringify({ items: cleanedObjects, cursor });
     } else {
       return JSON.stringify([]);
     }

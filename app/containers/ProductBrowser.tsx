@@ -13,6 +13,7 @@ function ProductBrowser() {
   const navigation = useNavigation();
   const [progress, setProgress] = useState(0);
   let { productResp } = useLoaderData<typeof loader>();
+  console.log(productResp);
   const screens = useBreakpoint();
 
   if (navigation.state === "loading" && progress === 0) {

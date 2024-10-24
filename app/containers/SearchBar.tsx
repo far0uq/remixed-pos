@@ -19,8 +19,8 @@ function SearchBar() {
   const handleSaveQuery = (values: SearchFormat) => {
     console.log(values);
     const params = new URLSearchParams();
-    params.set("query", values.query);
-    params.set("category", values.category);
+    if (values.query) params.set("query", values.query);
+    if (values.category) params.set("category", values.category);
     setSearchParams(params, {
       preventScrollReset: true,
     });
@@ -52,27 +52,28 @@ function SearchBar() {
           </Form.Item>
         </Col>
         <Col xs={12} sm={{ span: 4, offset: 1 }} lg={{ span: 3, offset: 3 }}>
-          <Form.Item name="category">
-            <Suspense fallback={<CategoriesLoading />}>
-              <Await resolve={categoryResp}>
-                {(categoryResp: string) => {
-                  const categoryData = JSON.parse(categoryResp);
-                  return (
+          <Suspense fallback={<CategoriesLoading />}>
+            <Await resolve={categoryResp}>
+              {(categoryResp: string) => {
+                const categoryData = JSON.parse(categoryResp);
+                return (
+                  <Form.Item name="category">
                     <Select
                       defaultValue="Category"
-                      options={categoryData.map(
-                        (category: CategoryFormatted) => ({
+                      options={[
+                        { label: "All", value: "" },
+                        ...categoryData.map((category: CategoryFormatted) => ({
                           label: category.label,
                           value: category.value,
-                        })
-                      )}
+                        })),
+                      ]}
                       style={{ width: "100%" }}
                     />
-                  );
-                }}
-              </Await>
-            </Suspense>
-          </Form.Item>
+                  </Form.Item>
+                );
+              }}
+            </Await>
+          </Suspense>
         </Col>
         <Col xs={12} sm={4} lg={3}>
           <Form.Item>
