@@ -21,11 +21,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const url = new URL(request.url);
-  console.log("URL: ", url);
   const cursor = url.searchParams.get("cursor");
 
   if (cursor) {
-    console.log("EXECUTED 1");
     const resp = await getProducts(request);
     return resp;
   } else {

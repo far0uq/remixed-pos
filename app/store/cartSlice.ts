@@ -141,6 +141,8 @@ export const createCartStore: StateCreator<CartSlice> = (set, get) => ({
     type: "order" | "item",
     name: string
   ) {
+    console.log("ADDING TAX TO SLICE");
+
     if (type === "order") {
       set((state) => {
         const totalProducts = state.cartProducts.length;

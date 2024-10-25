@@ -2,13 +2,23 @@ import { useState } from "react";
 import { Button, Divider, Row, Col, Grid, Drawer, Image } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import WebsiteLogo from "../../public/doryabooks.svg";
+import { useFetcher } from "@remix-run/react";
+import CartContainer from "./cart/CartContainer";
+import { useTotalStore } from "~/store/store";
 
 const { useBreakpoint } = Grid;
 
 function NavbarContainer() {
   const screens = useBreakpoint();
   const [open, setOpen] = useState(false);
-  const openDrawer = () => setOpen(true);
+  const cartLength = useTotalStore((state) => state.cartLength);
+
+  const fetcher = useFetcher();
+
+  const openDrawer = () => {
+    if (!fetcher.data && cartLength > 0) fetcher.load("/modifiers");
+    setOpen(true);
+  };
   const closeDrawer = () => setOpen(false);
 
   const handleLogout = async () => {
@@ -59,9 +69,7 @@ function NavbarContainer() {
             closable={screens.sm ? false : true}
             width={"500px"}
           >
-            {/* <QueryClientWrapper>
-              <CartContainer />
-            </QueryClientWrapper> */}
+            <CartContainer fetcher={fetcher} />
           </Drawer>
         </Col>
         <Col

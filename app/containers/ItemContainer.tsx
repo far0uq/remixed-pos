@@ -12,7 +12,6 @@ const { useBreakpoint } = Grid;
 function ItemContainer({ productResp: data }: { productResp: string }) {
   const fetcher = useFetcher();
   const screens = useBreakpoint();
-  console.log(JSON.parse(data));
 
   const [items, setItems] = useState<Product[]>(JSON.parse(data).items);
   const [cursor, setCursor] = useState<string>(JSON.parse(data).cursor);

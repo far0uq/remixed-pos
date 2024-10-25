@@ -1,3 +1,7 @@
+import {
+  LineItemResponseCleaned,
+  OrderTotalResponseObject,
+} from "~/interface/OrderInterface";
 import { Product, CatalogProductAPI } from "../interface/ProductInterface";
 
 export const cleanProductObjects = (
@@ -22,4 +26,16 @@ export const cleanProductObjects = (
     });
   });
   return cleanedObjects;
+};
+
+export const getProductMoneyDetails = (
+  productID: string,
+  mutationData: OrderTotalResponseObject | undefined
+) => {
+  if (mutationData) {
+    const foundData = mutationData.lineItemDetails.find(
+      (lineItem: LineItemResponseCleaned) => lineItem.uid === productID
+    );
+    return foundData;
+  }
 };
