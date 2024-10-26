@@ -21,9 +21,7 @@ function CartContainer({ fetcher }: { fetcher: Fetcher }) {
   const quantityCounts = useTotalStore((state) => state.quantityCounts);
   const taxes = useTotalStore((state) => state.taxes);
   const discounts = useTotalStore((state) => state.discounts);
-  // const discountQuery: DiscountQuery = useFetchDiscounts();
-  // const taxQuery: TaxQuery = useFetchTaxes();
-  const { data, isError, isPending, mutate } = useCartMutation();
+  const { order, isError, isPending, mutate } = useCartMutation();
 
   useEffect(() => {
     mutate();
@@ -43,12 +41,6 @@ function CartContainer({ fetcher }: { fetcher: Fetcher }) {
     }
   }, [fetcher.data]);
 
-  if (!fetcher.data) {
-    return (
-      <Empty style={{ marginTop: "40vh" }} description="No items in cart" />
-    );
-  }
-
   return (
     <div>
       {products && products.length > 0 ? (
@@ -56,7 +48,7 @@ function CartContainer({ fetcher }: { fetcher: Fetcher }) {
           {products.map((product) => {
             const productMoneyDetails = getProductMoneyDetails(
               product.id,
-              data as OrderTotalResponseObject
+              order as OrderTotalResponseObject
             );
 
             return (
@@ -87,7 +79,9 @@ function CartContainer({ fetcher }: { fetcher: Fetcher }) {
 
               {isError && <p>Error calculating order</p>}
               {isPending && <p>Calculating order...</p>}
-              {data ? <TotalPaymentInfo totalAll={data.orderResponse} /> : null}
+              {order && !isError && !isPending ? (
+                <TotalPaymentInfo totalAll={order.orderResponse} />
+              ) : null}
             </Flex>
           </Card>
         </Flex>

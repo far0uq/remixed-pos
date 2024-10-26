@@ -32,6 +32,7 @@ export const getCleanedModifierForTotal = (
       });
     }
   }
+  console.log("CLEANED MODIFIERS", cleanedModifiers);
   return cleanedModifiers;
 };
 

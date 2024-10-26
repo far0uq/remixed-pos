@@ -1,4 +1,6 @@
 import { useFetcher } from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { OrderTotalResponseObject } from "~/interface/OrderInterface";
 import { useTotalStore } from "~/store/store";
 
 export const useCartMutation = () => {
@@ -11,10 +13,13 @@ export const useCartMutation = () => {
   const getItemTaxRecord = useTotalStore((state) => state.itemTaxRecord);
   const getQuantityCounts = useTotalStore((state) => state.quantityCounts);
 
+  const [order, setOrder] = useState<OrderTotalResponseObject>();
+
   const fetcher = useFetcher();
 
   const mutate = () => {
     console.log("MUTATING");
+    setOrder(null);
     const cartLength = getCartLength;
     const taxes = getTaxes;
     const discounts = getDiscounts;
@@ -22,7 +27,7 @@ export const useCartMutation = () => {
     const itemTaxRecord = getItemTaxRecord;
     const quantityCounts = getQuantityCounts;
     console.log("🚀 ~ mutate ~ taxes", taxes);
-
+    fetcher.data = null;
     fetcher.submit(
       {
         cartLength,
@@ -39,9 +44,14 @@ export const useCartMutation = () => {
     );
   };
 
+  useEffect(() => {
+    if (fetcher.data) {
+      setOrder(JSON.parse(fetcher.data).data);
+    }
+  }, [fetcher.data]);
+
   const isPending = fetcher.state === "loading";
   const isError = fetcher.state === "idle" && !fetcher.data;
-  const data = fetcher.data ? JSON.parse(fetcher.data).data : null;
 
-  return { data, isError, isPending, mutate };
+  return { order, isError, isPending, mutate };
 };
