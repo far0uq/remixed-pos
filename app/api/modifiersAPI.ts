@@ -28,7 +28,7 @@ export const getTaxes = async (req: Request) => {
     return JSON.stringify(result);
   } catch (error) {
     console.log(error);
-    return JSON.stringify([]);
+    return JSON.stringify({ error }), { status: 500 };
   }
 };
 
@@ -62,6 +62,6 @@ export const getDiscounts = async (req: Request) => {
     return JSON.stringify(result);
   } catch (error) {
     console.log(error);
-    return JSON.stringify([]);
+    return JSON.stringify({ error }), { status: 500 };
   }
 };

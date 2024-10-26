@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Button, Divider, Row, Col, Grid, Drawer, Image, theme } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import WebsiteLogo from "../../public/doryabooks.svg";
-import { useFetcher } from "@remix-run/react";
 import CartContainer from "./cart/CartContainer";
 import { useTotalStore } from "~/store/store";
 import toast from "react-hot-toast";
+import { useFetchModifiers } from "~/hooks/useFetchModifiers";
 
 const { useBreakpoint } = Grid;
 const { useToken } = theme;
@@ -15,11 +15,19 @@ function NavbarContainer() {
   const [open, setOpen] = useState(false);
   const cartLength = useTotalStore((state) => state.cartLength);
 
-  const fetcher = useFetcher();
+  const {
+    loadModifiers,
+    areTaxesLoading,
+    areDiscountsLoading,
+    TaxesCleaned,
+    DiscountsCleaned,
+    taxError,
+    discountError,
+  } = useFetchModifiers();
   const { token } = useToken();
 
   const openDrawer = () => {
-    if (!fetcher.data && cartLength > 0) fetcher.load("/modifiers");
+    if (!TaxesCleaned && !DiscountsCleaned && cartLength > 0) loadModifiers();
     setOpen(true);
   };
   const closeDrawer = () => setOpen(false);
@@ -85,7 +93,14 @@ function NavbarContainer() {
             closable={screens.sm ? false : true}
             width={"500px"}
           >
-            <CartContainer fetcher={fetcher} />
+            <CartContainer
+              areTaxesLoading={areTaxesLoading}
+              areDiscountsLoading={areDiscountsLoading}
+              TaxesCleaned={TaxesCleaned}
+              DiscountsCleaned={DiscountsCleaned}
+              taxError={taxError}
+              discountError={discountError}
+            />
           </Drawer>
         </Col>
         <Col

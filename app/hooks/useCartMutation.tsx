@@ -15,6 +15,7 @@ export const useCartMutation = () => {
 
   const [order, setOrder] = useState<OrderTotalResponseObject>();
   const [isPending, setIsPending] = useState(false);
+  const [orderError, setOrderError] = useState(false);
 
   const fetcher = useFetcher();
 
@@ -47,10 +48,12 @@ export const useCartMutation = () => {
 
   useEffect(() => {
     if (fetcher.data) {
+      if (fetcher.data.error) setOrderError(true);
       setIsPending(false);
+      if (orderError) setOrderError(false);
       setOrder(JSON.parse(fetcher.data).data);
     }
   }, [fetcher.data]);
 
-  return { order, isPending, mutate };
+  return { order, orderError, isPending, mutate };
 };

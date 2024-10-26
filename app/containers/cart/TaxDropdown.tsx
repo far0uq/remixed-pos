@@ -19,10 +19,14 @@ function TaxDropdown({
   taxQuery: taxData,
   productID,
   dropDownType,
+  areTaxesLoading,
+  taxError,
 }: {
   taxQuery: TaxOption[];
   productID: string;
   dropDownType: "order" | "item";
+  areTaxesLoading: boolean;
+  taxError: boolean;
 }) {
   const addTax = useTotalStore((state) => state.addTax);
   const removeTax = useTotalStore((state) => state.removeTax);
@@ -63,7 +67,7 @@ function TaxDropdown({
       <Select
         labelInValue
         mode="multiple"
-        placeholder={"Select taxes"}
+        placeholder={areTaxesLoading ? "Loading taxes..." : "Select taxes"}
         defaultValue={[]}
         value={defaultValues}
         style={{ width: "100%" }}
@@ -74,6 +78,7 @@ function TaxDropdown({
         }
         onSelect={handleAddTax}
         onDeselect={handleRemoveTax}
+        disabled={taxError}
       />
     </div>
   );

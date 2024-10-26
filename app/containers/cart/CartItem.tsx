@@ -17,12 +17,20 @@ function CartItem({
   discountQuery,
   taxQuery,
   individualCost,
+  areDiscountsLoading,
+  areTaxesLoading,
+  taxError,
+  discountError,
 }: {
   item: Product;
   itemQuantity: number;
   discountQuery: DiscountOption[];
   taxQuery: TaxOption[];
   individualCost: LineItemResponseCleaned;
+  areDiscountsLoading: boolean;
+  areTaxesLoading: boolean;
+  taxError: boolean;
+  discountError: boolean;
 }) {
   const { token } = useToken();
   const addProduct = useTotalStore((state) => state.addProduct);
@@ -101,12 +109,16 @@ function CartItem({
         </Flex>
         <DiscountDropdown
           discountQuery={discountQuery}
+          areDiscountsLoading={areDiscountsLoading}
+          discountError={discountError}
           productID={item.id}
           dropDownType="item"
         />
 
         <TaxDropdown
           taxQuery={taxQuery}
+          areTaxesLoading={areTaxesLoading}
+          taxError={taxError}
           productID={item.id}
           dropDownType="item"
         />

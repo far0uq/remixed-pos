@@ -8,38 +8,36 @@ import {
 } from "../../interface/OrderInterface";
 import TotalPaymentInfo from "./TotalPaymentInfo";
 import { useCartMutation } from "../../hooks/useCartMutation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import DiscountDropdown from "./DiscountDropdown";
-import { Fetcher } from "@remix-run/react";
 import { getProductMoneyDetails } from "~/utils/productHelper";
 import { TaxOption } from "~/interface/TaxInterface";
 import { DiscountOption } from "~/interface/DiscountInterface";
-import { cleanDiscounts, cleanTaxes } from "~/utils/modifierHelper";
 
-function CartContainer({ fetcher }: { fetcher: Fetcher }) {
+function CartContainer({
+  areTaxesLoading,
+  areDiscountsLoading,
+  TaxesCleaned,
+  DiscountsCleaned,
+  taxError,
+  discountError,
+}: {
+  areTaxesLoading: boolean;
+  areDiscountsLoading: boolean;
+  TaxesCleaned: TaxOption[];
+  DiscountsCleaned: DiscountOption[];
+  taxError: boolean;
+  discountError: boolean;
+}) {
   const products = useTotalStore((state) => state.cartProducts);
   const quantityCounts = useTotalStore((state) => state.quantityCounts);
   const taxes = useTotalStore((state) => state.taxes);
   const discounts = useTotalStore((state) => state.discounts);
-  const { order, isError, isPending, mutate } = useCartMutation();
+  const { order, orderError, isPending, mutate } = useCartMutation();
 
   useEffect(() => {
     mutate();
   }, [products, quantityCounts, taxes, discounts]);
-
-  const [TaxesCleaned, setTaxesCleaned] = useState<TaxOption[]>([]);
-  const [DiscountsCleaned, setDiscountsCleaned] = useState<DiscountOption[]>(
-    []
-  );
-
-  useEffect(() => {
-    if (fetcher.data) {
-      setTaxesCleaned(cleanTaxes(JSON.parse(fetcher.data.TaxesResp)));
-      setDiscountsCleaned(
-        cleanDiscounts(JSON.parse(fetcher.data.DiscountsResp))
-      );
-    }
-  }, [fetcher.data]);
 
   return (
     <div>
@@ -58,6 +56,10 @@ function CartContainer({ fetcher }: { fetcher: Fetcher }) {
                 itemQuantity={quantityCounts.get(product.id) ?? 0}
                 discountQuery={DiscountsCleaned}
                 taxQuery={TaxesCleaned}
+                areDiscountsLoading={areDiscountsLoading}
+                areTaxesLoading={areTaxesLoading}
+                discountError={discountError}
+                taxError={taxError}
                 individualCost={productMoneyDetails as LineItemResponseCleaned}
               />
             );
@@ -67,19 +69,23 @@ function CartContainer({ fetcher }: { fetcher: Fetcher }) {
             <Flex gap="large" vertical>
               <DiscountDropdown
                 discountQuery={DiscountsCleaned}
+                areDiscountsLoading={areDiscountsLoading}
+                discountError={discountError}
                 productID="none"
                 dropDownType="order"
               />
 
               <TaxDropdown
                 taxQuery={TaxesCleaned}
+                areTaxesLoading={areTaxesLoading}
+                taxError={taxError}
                 productID="none"
                 dropDownType="order"
               />
 
-              {isError && <p>Error calculating order</p>}
+              {orderError && <p>Could not calculate order.</p>}
               {isPending && <p>Calculating order...</p>}
-              {order && !isError && !isPending ? (
+              {order && !isPending ? (
                 <TotalPaymentInfo totalAll={order.orderResponse} />
               ) : null}
             </Flex>

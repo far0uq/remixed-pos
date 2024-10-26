@@ -19,10 +19,14 @@ function DiscountDropdown({
   discountQuery: discountData,
   productID,
   dropDownType,
+  areDiscountsLoading,
+  discountError,
 }: {
   discountQuery: DiscountOption[];
   productID: string;
   dropDownType: "order" | "item";
+  areDiscountsLoading: boolean;
+  discountError: boolean;
 }) {
   const addDiscount = useTotalStore((state) => state.addDiscount);
   const removeDiscount = useTotalStore((state) => state.removeDiscount);
@@ -71,7 +75,9 @@ function DiscountDropdown({
       <Select
         labelInValue
         mode="multiple"
-        placeholder={"Select discounts"}
+        placeholder={
+          areDiscountsLoading ? "Loading discounts..." : "Select discounts"
+        }
         defaultValue={[]}
         value={defaultValues}
         style={{ width: "100%" }}
@@ -82,6 +88,7 @@ function DiscountDropdown({
         }
         onSelect={handleAddDiscount}
         onDeselect={handleRemoveDiscount}
+        disabled={discountError}
       />
     </div>
   );
