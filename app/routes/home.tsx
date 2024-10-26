@@ -1,4 +1,5 @@
 import { defer, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { Toaster } from "react-hot-toast";
 import { getCategory, getProducts } from "~/api/productAPI";
 import { verifyToken } from "~/api/tokenAPI";
 import NavbarContainer from "~/containers/NavbarContainer";
@@ -7,6 +8,7 @@ import ProductBrowser from "~/containers/ProductBrowser";
 function HomePage() {
   return (
     <div>
+      <Toaster />
       <NavbarContainer />
       <ProductBrowser />
     </div>

@@ -14,12 +14,14 @@ export const useCartMutation = () => {
   const getQuantityCounts = useTotalStore((state) => state.quantityCounts);
 
   const [order, setOrder] = useState<OrderTotalResponseObject>();
+  const [isPending, setIsPending] = useState(false);
 
   const fetcher = useFetcher();
 
   const mutate = () => {
     console.log("MUTATING");
-    setOrder(null);
+    setOrder(undefined);
+    setIsPending(true);
     const cartLength = getCartLength;
     const taxes = getTaxes;
     const discounts = getDiscounts;
@@ -27,7 +29,6 @@ export const useCartMutation = () => {
     const itemTaxRecord = getItemTaxRecord;
     const quantityCounts = getQuantityCounts;
     console.log("🚀 ~ mutate ~ taxes", taxes);
-    fetcher.data = null;
     fetcher.submit(
       {
         cartLength,
@@ -46,12 +47,10 @@ export const useCartMutation = () => {
 
   useEffect(() => {
     if (fetcher.data) {
+      setIsPending(false);
       setOrder(JSON.parse(fetcher.data).data);
     }
   }, [fetcher.data]);
 
-  const isPending = fetcher.state === "loading";
-  const isError = fetcher.state === "idle" && !fetcher.data;
-
-  return { order, isError, isPending, mutate };
+  return { order, isPending, mutate };
 };

@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Button, Divider, Row, Col, Grid, Drawer, Image } from "antd";
+import { Button, Divider, Row, Col, Grid, Drawer, Image, theme } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import WebsiteLogo from "../../public/doryabooks.svg";
 import { useFetcher } from "@remix-run/react";
 import CartContainer from "./cart/CartContainer";
 import { useTotalStore } from "~/store/store";
+import toast from "react-hot-toast";
 
 const { useBreakpoint } = Grid;
+const { useToken } = theme;
 
 function NavbarContainer() {
   const screens = useBreakpoint();
@@ -14,6 +16,7 @@ function NavbarContainer() {
   const cartLength = useTotalStore((state) => state.cartLength);
 
   const fetcher = useFetcher();
+  const { token } = useToken();
 
   const openDrawer = () => {
     if (!fetcher.data && cartLength > 0) fetcher.load("/modifiers");
@@ -30,6 +33,19 @@ function NavbarContainer() {
     });
 
     if (resp.redirected) {
+      toast.success("Logged Out Successfully.", {
+        style: {
+          border: `1px solid ${token.colorSuccess}`,
+          padding: "16px",
+          color: token.colorSuccess,
+          fontSize: "20px",
+        },
+        iconTheme: {
+          primary: token.colorSuccess,
+          secondary: "white",
+        },
+      });
+
       window.location.replace(resp.url);
     }
   };
