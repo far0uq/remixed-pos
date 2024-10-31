@@ -70,6 +70,7 @@ function DiscountDropdown({
     setDefaultValues(values);
   }, [itemDiscountRecord, discounts, getDefaultDiscounts]);
 
+  console.log("defaultValues", defaultValues);
   return (
     <div>
       <Select

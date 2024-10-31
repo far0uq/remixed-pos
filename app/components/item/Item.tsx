@@ -4,9 +4,9 @@ import {
   PlusCircleOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { Product } from "../interface/ProductInterface";
-import { useTotalStore } from "../store/store";
-import { fallbackImage } from "../../constants/fallbackImage";
+import { Product } from "../../interface/ProductInterface";
+import { useTotalStore } from "../../store/store";
+import { fallbackImage } from "../../../constants/fallbackImage";
 
 const { Meta } = Card;
 const { useBreakpoint } = Grid;

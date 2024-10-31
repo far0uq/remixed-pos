@@ -1,15 +1,15 @@
-import CartItem from "./CartItem";
+import CartItem from "../../components/cart/CartItem";
 import { Card, Flex, Empty } from "antd";
 import { useTotalStore } from "../../store/store";
-import TaxDropdown from "./TaxDropdown";
+import TaxDropdown from "../../components/cart/TaxDropdown";
 import {
   LineItemResponseCleaned,
   OrderTotalResponseObject,
 } from "../../interface/OrderInterface";
-import TotalPaymentInfo from "./TotalPaymentInfo";
+import TotalPaymentInfo from "../../components/cart/TotalPaymentInfo";
 import { useCartMutation } from "../../hooks/useCartMutation";
 import { useEffect } from "react";
-import DiscountDropdown from "./DiscountDropdown";
+import DiscountDropdown from "../../components/cart/DiscountDropdown";
 import { getProductMoneyDetails } from "~/utils/productHelper";
 import { TaxOption } from "~/interface/TaxInterface";
 import { DiscountOption } from "~/interface/DiscountInterface";

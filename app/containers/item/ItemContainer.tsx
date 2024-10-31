@@ -1,10 +1,10 @@
 import { Empty, Flex, Grid } from "antd";
 
-import Item from "./Item";
+import Item from "../../components/item/Item";
 import { useState, useEffect } from "react";
-import { Product } from "../interface/ProductInterface";
+import { Product } from "../../interface/ProductInterface";
 import InfiniteScroll from "react-infinite-scroll-component";
-import ItemsLoading from "./ItemsLoading";
+import ItemsLoading from "../../components/item/ItemsLoading";
 import { useFetcher } from "@remix-run/react";
 
 const { useBreakpoint } = Grid;

@@ -1,8 +1,8 @@
 import { Flex, Grid } from "antd";
 import SearchBar from "./SearchBar";
 import { Suspense, useState } from "react";
-import ItemContainer from "./ItemContainer";
-import ItemsLoading from "./ItemsLoading";
+import ItemContainer from "../item/ItemContainer";
+import ItemsLoading from "../../components/item/ItemsLoading";
 import { Await, useLoaderData, useNavigation } from "@remix-run/react";
 import { loader } from "~/routes/auth";
 import LoadingBar from "react-top-loading-bar";

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, Divider, Row, Col, Grid, Drawer, Image, theme } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import WebsiteLogo from "../../public/doryabooks.svg";
-import CartContainer from "./cart/CartContainer";
+import WebsiteLogo from "public/doryabooks.svg";
+import CartContainer from "../cart/CartContainer";
 import { useTotalStore } from "~/store/store";
 import toast from "react-hot-toast";
 import { useFetchModifiers } from "~/hooks/useFetchModifiers";

@@ -32,7 +32,6 @@ export const getProductMoneyDetails = (
   productID: string,
   mutationData: OrderTotalResponseObject | undefined
 ) => {
-  console.log("🚀 ~ getProductMoneyDetails ~ mutationData", mutationData);
   if (mutationData) {
     const foundData = mutationData.lineItemDetails.find(
       (lineItem: LineItemResponseCleaned) => lineItem.uid === productID

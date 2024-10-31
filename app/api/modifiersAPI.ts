@@ -1,5 +1,6 @@
 import { getSession } from "~/services/session";
 import { tokenTypes } from "../types/tokenTypes";
+import { cleanDiscounts, cleanTaxes } from "~/utils/modifierHelper";
 
 export const getTaxes = async (req: Request) => {
   try {
@@ -25,7 +26,7 @@ export const getTaxes = async (req: Request) => {
     if (!success) {
       throw new Error("Failed to fetch taxes");
     }
-    return JSON.stringify(result);
+    return JSON.stringify(cleanTaxes(result));
   } catch (error) {
     console.log(error);
     return JSON.stringify({ error }), { status: 500 };
@@ -59,7 +60,8 @@ export const getDiscounts = async (req: Request) => {
     if (!success) {
       throw new Error("Failed to fetch discounts");
     }
-    return JSON.stringify(result);
+
+    return JSON.stringify(cleanDiscounts(result));
   } catch (error) {
     console.log(error);
     return JSON.stringify({ error }), { status: 500 };

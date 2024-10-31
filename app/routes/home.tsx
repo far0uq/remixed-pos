@@ -2,8 +2,8 @@ import { defer, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Toaster } from "react-hot-toast";
 import { getCategory, getProducts } from "~/api/productAPI";
 import { verifyToken } from "~/api/tokenAPI";
-import NavbarContainer from "~/containers/NavbarContainer";
-import ProductBrowser from "~/containers/ProductBrowser";
+import NavbarContainer from "~/containers/search/NavbarContainer";
+import ProductBrowser from "~/containers/search/ProductBrowser";
 
 function HomePage() {
   return (
