@@ -4,7 +4,7 @@ import { Await, useLoaderData, useSearchParams } from "@remix-run/react";
 import { loader } from "~/routes/auth";
 import { CategoryFormatted } from "~/interface/CategoryInterface";
 import { Suspense } from "react";
-import CategoriesLoading from "./CategoriesLoading";
+import CategoriesLoading from "../../components/search/CategoriesLoading";
 
 function SearchBar() {
   const { categoryResp } = useLoaderData<typeof loader>();

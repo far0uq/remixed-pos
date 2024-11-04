@@ -1,12 +1,14 @@
 import { defer, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { Toaster } from "react-hot-toast";
 import { getCategory, getProducts } from "~/api/productAPI";
 import { verifyToken } from "~/api/tokenAPI";
-import NavbarContainer from "~/containers/NavbarContainer";
-import ProductBrowser from "~/containers/ProductBrowser";
+import NavbarContainer from "~/containers/search/NavbarContainer";
+import ProductBrowser from "~/containers/search/ProductBrowser";
 
 function HomePage() {
   return (
     <div>
+      <Toaster />
       <NavbarContainer />
       <ProductBrowser />
     </div>
@@ -21,11 +23,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const url = new URL(request.url);
-  console.log("URL: ", url);
   const cursor = url.searchParams.get("cursor");
 
   if (cursor) {
-    console.log("EXECUTED 1");
     const resp = await getProducts(request);
     return resp;
   } else {

@@ -1,14 +1,35 @@
 import { useState } from "react";
-import { Button, Divider, Row, Col, Grid, Drawer, Image } from "antd";
+import { Button, Divider, Row, Col, Grid, Drawer, Image, theme } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import WebsiteLogo from "../../public/doryabooks.svg";
+import WebsiteLogo from "public/doryabooks.svg";
+import CartContainer from "../cart/CartContainer";
+import { useTotalStore } from "~/store/store";
+import toast from "react-hot-toast";
+import { useFetchModifiers } from "~/hooks/useFetchModifiers";
 
 const { useBreakpoint } = Grid;
+const { useToken } = theme;
 
 function NavbarContainer() {
   const screens = useBreakpoint();
   const [open, setOpen] = useState(false);
-  const openDrawer = () => setOpen(true);
+  const cartLength = useTotalStore((state) => state.cartLength);
+
+  const {
+    loadModifiers,
+    areTaxesLoading,
+    areDiscountsLoading,
+    TaxesCleaned,
+    DiscountsCleaned,
+    taxError,
+    discountError,
+  } = useFetchModifiers();
+  const { token } = useToken();
+
+  const openDrawer = () => {
+    if (!TaxesCleaned && !DiscountsCleaned && cartLength > 0) loadModifiers();
+    setOpen(true);
+  };
   const closeDrawer = () => setOpen(false);
 
   const handleLogout = async () => {
@@ -20,6 +41,19 @@ function NavbarContainer() {
     });
 
     if (resp.redirected) {
+      toast.success("Logged Out Successfully.", {
+        style: {
+          border: `1px solid ${token.colorSuccess}`,
+          padding: "16px",
+          color: token.colorSuccess,
+          fontSize: "20px",
+        },
+        iconTheme: {
+          primary: token.colorSuccess,
+          secondary: "white",
+        },
+      });
+
       window.location.replace(resp.url);
     }
   };
@@ -59,9 +93,14 @@ function NavbarContainer() {
             closable={screens.sm ? false : true}
             width={"500px"}
           >
-            {/* <QueryClientWrapper>
-              <CartContainer />
-            </QueryClientWrapper> */}
+            <CartContainer
+              areTaxesLoading={areTaxesLoading}
+              areDiscountsLoading={areDiscountsLoading}
+              TaxesCleaned={TaxesCleaned}
+              DiscountsCleaned={DiscountsCleaned}
+              taxError={taxError}
+              discountError={discountError}
+            />
           </Drawer>
         </Col>
         <Col
